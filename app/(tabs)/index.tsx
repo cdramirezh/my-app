@@ -1,5 +1,6 @@
 import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
+import CameraComponent from "../components/Camera";
 // import LateralScrollTable from "../components/LateralScrollTable";
 // import ButtonFetch from "../components/Fetch";
 // import ButtonAxios from "../components/axios";
@@ -20,6 +21,7 @@ export default function Index() {
       {/* <LateralScrollTable /> */}
       {/* <ButtonFetch /> */}
       {/* <ButtonAxios /> */}
+      <CameraComponent />
     </View>
   );
 }
