@@ -1,7 +1,8 @@
 import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
-import LateralScrollTable from "../components/LateralScrollTable";
-import ButtonFetch from "../components/Fetch";
+// import LateralScrollTable from "../components/LateralScrollTable";
+// import ButtonFetch from "../components/Fetch";
+// import ButtonAxios from "../components/axios";
 
 export default function Index() {
 
@@ -17,7 +18,8 @@ export default function Index() {
       <Link href="/about" style={styles.button}>Ir a About</Link>
       {/* <Link href="/error" style={styles.button}>Ir a 404</Link> */}
       {/* <LateralScrollTable /> */}
-      <ButtonFetch />
+      {/* <ButtonFetch /> */}
+      {/* <ButtonAxios /> */}
     </View>
   );
 }
