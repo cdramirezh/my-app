@@ -1,6 +1,8 @@
 import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
-import FilePickerComponent from "../components/FilePicker";
+// import FilePickerComponent from "../components/FilePicker";
+import SignatureComponent from "../components/Signature";
+import SignatureWeb from "../components/SignatureWeb";
 // import StorageComponent from "../components/Storage";
 // import CameraComponent from "../components/Camera";
 // import LateralScrollTable from "../components/LateralScrollTable";
@@ -25,7 +27,9 @@ export default function Index() {
       {/* <ButtonAxios /> */}
       {/* <CameraComponent /> */}
       {/* <StorageComponent /> */}
-      <FilePickerComponent />
+      {/* <FilePickerComponent /> */}
+      {/* <SignatureComponent /> */}
+      <SignatureWeb />
     </View>
   );
 }
