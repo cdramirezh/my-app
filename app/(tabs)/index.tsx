@@ -8,6 +8,9 @@ export default function Index() {
       <Text style={styles.bigBlue}>bigBlue</Text>
       <Text style={[styles.bigBlue, styles.red]}>bigBlue, the red</Text>
       <Text style={[styles.red, styles.bigBlue]}>red, the bigBlue</Text>
+      <View style={styles.box1} />
+      <View style={styles.box2} />
+      <View style={styles.box3} />
     </View>
   );
 }
@@ -24,5 +27,20 @@ const styles = StyleSheet.create({
   },
   red: {
     color: "red",
+  },
+  box1: {
+    width: 50,
+    height: 50,
+    backgroundColor: "powderblue",
+  },
+  box2: {
+    width: 100,
+    height: 100,
+    backgroundColor: "skyblue",
+  },
+  box3: {
+    width: 150,
+    height: 150,
+    backgroundColor: "steelblue",
   },
 });
