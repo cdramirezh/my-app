@@ -1,102 +1,38 @@
-import React, {useState} from 'react';
-import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
-import type {PropsWithChildren} from 'react';
+import React from 'react';
+import { StyleSheet, Text, ScrollView, StatusBar } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
-const DirectionLayout = () => {
-  const [direction, setDirection] = useState<'ltr' | 'rtl'>('ltr');
-
-  return (
-    <PreviewLayout
-      label="Dirección"
-      selectedValue={direction}
-      values={['ltr', 'rtl']}
-      setSelectedValue={setDirection}>
-      <View style={[styles.box, {backgroundColor: 'powderblue'}]} />
-      <View style={[styles.box, {backgroundColor: 'skyblue'}]} />
-      <View style={[styles.box, {backgroundColor: 'steelblue'}]} />
-      <Text style={{direction: 'rtl'}}>Cómo funciona un texto?</Text>
-    </PreviewLayout>
-  );
-};
-
-type PreviewLayoutProps = PropsWithChildren<{
-  label: string;
-  values: ('ltr' | 'rtl')[];
-  selectedValue: 'ltr' | 'rtl';
-  setSelectedValue: (value: 'ltr' | 'rtl') => void;
-}>;
-
-const PreviewLayout = ({
-  label,
-  children,
-  values,
-  selectedValue,
-  setSelectedValue,
-}: PreviewLayoutProps) => (
-  <View style={{padding: 10, flex: 1}}>
-    <Text style={styles.label}>{label}</Text>
-    <View style={styles.row}>
-      {values.map(value => (
-        <TouchableOpacity
-          key={value}
-          onPress={() => setSelectedValue(value)}
-          style={[styles.button, selectedValue === value && styles.selected]}>
-          <Text
-            style={[
-              styles.buttonLabel,
-              selectedValue === value && styles.selectedLabel,
-            ]}>
-            {value}
-          </Text>
-        </TouchableOpacity>
-      ))}
-    </View>
-    <View style={[styles.container, {direction: selectedValue}]}>{children}</View>
-  </View>
+const App = () => (
+  <SafeAreaProvider>
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <ScrollView style={styles.scrollView}>
+        <Text>No hago lazy loading :(</Text>
+        <Text style={styles.text}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </Text>
+      </ScrollView>
+    </SafeAreaView>
+  </SafeAreaProvider>
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 8,
-    backgroundColor: 'aliceblue',
+    paddingTop: StatusBar.currentHeight,
   },
-  box: {
-    width: 50,
-    height: 50,
+  scrollView: {
+    backgroundColor: 'pink',
   },
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  button: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    borderRadius: 4,
-    backgroundColor: 'oldlace',
-    alignSelf: 'flex-start',
-    marginHorizontal: '1%',
-    marginBottom: 6,
-    minWidth: '48%',
-    textAlign: 'center',
-  },
-  selected: {
-    backgroundColor: 'coral',
-    borderWidth: 0,
-  },
-  buttonLabel: {
-    fontSize: 12,
-    fontWeight: '500',
-    color: 'coral',
-  },
-  selectedLabel: {
-    color: 'white',
-  },
-  label: {
-    textAlign: 'center',
-    marginBottom: 10,
-    fontSize: 24,
+  text: {
+    fontSize: 42,
+    padding: 12,
   },
 });
 
-export default DirectionLayout;
+export default App;
