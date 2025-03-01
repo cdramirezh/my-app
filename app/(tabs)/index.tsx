@@ -1,103 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Alert,
-  Button,
-  Modal,
   StyleSheet,
-  Switch,
   Text,
-  ScrollView,
   Pressable,
   View,
-  FlatList,
-  ActivityIndicator,
-  ImageBackground,
 } from 'react-native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { DATA } from '../../assets/data.js';
 
 type ItemProps = { title: string };
 
-const Item = ({ title }: ItemProps) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
-
 const App = () => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const createTwoButtonAlert = () =>
-    Alert.alert('Alert Title', 'My Alert Msg', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      { text: 'OK', onPress: () => console.log('OK Pressed') },
-    ]);
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <ScrollView style={styles.scrollView}>
-          <Button title="Soy un botón simple" onPress={() => Alert.alert('Simple Button pressed')} />
-          <Pressable onPress={() => Alert.alert('Un pressable es mucho más costomizable que un button')}>
-            <Text>I'm pressable!</Text>
-          </Pressable>
-          <Switch
-            trackColor={{ false: '#767577', true: '#81b0ff' }}
-            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
-          <View style={styles.horizontal}>
-            <ActivityIndicator />
-            <ActivityIndicator size="large" />
-            <ActivityIndicator size="small" color="#0000ff" />
-            <ActivityIndicator size="large" color="#00ff00" />
-          </View>
-          <Button title={'2-Button Alert'} onPress={createTwoButtonAlert} />
-        </ScrollView>
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(true)}>
-          <Text style={styles.textStyle}>Show Modal</Text>
-        </Pressable>
-        <ImageBackground source={{ uri: 'https://legacy.reactjs.org/logo-og.png' }} resizeMode="cover" style={styles.image}>
-          <Text style={styles.text}>Inside</Text>
-        </ImageBackground>
-
-        {/* <FlatList
-          data={DATA}
-          renderItem={({ item }) => <Item title={item.title} />}
-          keyExtractor={item => item.id}
-        /> */}
-      </SafeAreaView>
-    </SafeAreaProvider >
+    <View>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            backgroundColor: pressed ? "rgb(210, 36, 30)" : "rgb(161, 161, 158)",
+          },
+        ]}
+      >
+        {({ pressed }) => (
+          <Text style={styles.text}>{pressed ? "Pressed!" : "Press Me"}</Text>
+        )}
+      </Pressable>;
+    </View>
   )
 };
 
@@ -168,12 +94,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   text: {
-    color: 'white',
     fontSize: 42,
     lineHeight: 84,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: '#000000c0',
   },
 });
 
