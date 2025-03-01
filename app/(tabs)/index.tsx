@@ -2,13 +2,13 @@ import React from 'react';
 import {
   View,
 } from 'react-native';
-import { BasicTextStyling } from '../components/BasicTextStyling';
+import Home from '../components/Home';
 
 const App = () => {
 
   return (
     <View>
-      <BasicTextStyling />
+      <Home />
     </View>
   )
 };
