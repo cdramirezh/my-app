@@ -197,7 +197,40 @@ const Home = () => {
     );
   }
 
-  // paste recent searches code
+  function renderRecentSearches(item: Item, index: number) {
+    return (
+      <TouchableOpacity
+        style={{ flex: 1, flexDirection: "row" }}
+        onPress={() => {
+          setSelectedItem(item);
+          setShowAddToCartModal(true);
+        }}
+      >
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <Image
+            source={item.img}
+            resizeMode="contain"
+            style={{
+              width: 130,
+              height: 100,
+            }}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1.5,
+            marginLeft: SIZES.radius,
+            justifyContent: "center",
+          }}
+        >
+          <Text>{item.name}</Text>
+          <Text style={[{ ...FONTS.h3, fontWeight: 'regular' }]}>{item.price}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
 
   // paste renderSizes
 
@@ -221,7 +254,33 @@ const Home = () => {
           renderItem={({ item, index }) => renderFeaturedItems(item, index)}
         />
       </View>
-      {/* Recent Searches */}
+      <View
+        style={[
+          {
+            flex: 1,
+            flexDirection: "row",
+            marginTop: SIZES.padding,
+            borderTopLeftRadius: 30,
+            borderTopRightRadius: 30,
+            backgroundColor: COLORS.white,
+          }
+        ]}
+      >
+        <View style={{ width: 70, height: "100%", marginLeft: SIZES.base }}>
+          <Image
+            source={{ uri: images.searches }}
+            style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+          />
+        </View>
+        <View style={{ flex: 1, paddingBottom: SIZES.padding }}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={recentSearches}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item, index }) => renderRecentSearches(item, index)}
+          />
+        </View>
+      </View>
 
       {/* Modal */}
     </View>
@@ -249,6 +308,10 @@ const style = StyleSheet.create({
     flexDirection: "column",
     marginLeft: 25,
     marginBottom: 8,
+  },
+  recentSearches: {
+    width: "100%",
+    transform: [{ rotateY: "180deg" }]
   },
 });
 

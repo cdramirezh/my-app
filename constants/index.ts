@@ -64,4 +64,6 @@ export const images = {
   shirt1: 'https://prd.place/400',
   shirt2: 'https://prd.place/400',
   shoe1: 'https://prd.place/400',
+  searches: 'https://prd.place/400',
+  profile: 'https://prd.place/400',
 }
