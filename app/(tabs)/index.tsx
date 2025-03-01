@@ -2,13 +2,13 @@ import React from 'react';
 import {
   View,
 } from 'react-native';
-import DynamicPress from '../components/DynamicPress';
+import { BasicTextStyling } from '../components/BasicTextStyling';
 
 const App = () => {
 
   return (
     <View>
-      <DynamicPress />
+      <BasicTextStyling />
     </View>
   )
 };
