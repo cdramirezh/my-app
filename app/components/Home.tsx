@@ -232,7 +232,43 @@ const Home = () => {
     );
   }
 
-  // paste renderSizes
+  function renderSizes() {
+    if (selectedItem) return selectedItem.sizes.map((item, index) => {
+      return (
+        <TouchableOpacity
+          key={index}
+          style={{
+            width: 35,
+            height: 25,
+            alignItems: "center",
+            justifyContent: "center",
+            marginHorizontal: 5,
+            marginBottom: 10,
+            backgroundColor:
+              !!selectedItem && selectedItem.sizes[index] === Number(selectedSize) ? COLORS.white : 'white',
+            borderWidth: 1,
+            borderColor: COLORS.white,
+            borderRadius: 5,
+          }}
+          onPress={() => {
+            setSelectedSize(item.toString());
+          }}
+        >
+          <Text
+            style={{
+              color:
+                selectedItem.sizes[index] == Number(selectedSize)
+                  ? COLORS.black
+                  : COLORS.white,
+              ...FONTS.body4,
+            }}
+          >
+            {item}
+          </Text>
+        </TouchableOpacity>
+      );
+    });
+  }
 
   return (
     <View style={style.container}>
@@ -282,7 +318,121 @@ const Home = () => {
         </View>
       </View>
 
-      {/* Modal */}
+      {selectedItem && (
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showAddToCartModal}
+        >
+          <BlurView
+            style={style.blur}
+            tint="light"
+          // intencity={20}
+          >
+            <TouchableOpacity
+              style={style.absolute}
+              onPress={() => {
+                setSelectedItem(null);
+                setSelectedSize("");
+                setShowAddToCartModal(false);
+              }}
+            ></TouchableOpacity>
+            {/* Modal content */}
+            <View
+              style={{
+                justifyContent: "center",
+                width: "85%",
+                backgroundColor: selectedItem.bgColor,
+              }}
+            >
+              <View>
+                <Image
+                  source={{ uri: selectedItem.img }}
+                  resizeMode="contain"
+                  style={{
+                    width: "100%",
+                    height: 170,
+                  }}
+                />
+              </View>
+              <Text
+                style={[{
+                  marginTop: SIZES.padding,
+                  marginHorizontal: SIZES.padding,
+                  color: COLORS.white,
+                },
+                { ...FONTS.h2, fontWeight: 'regular' },
+                ]}
+              >
+                {selectedItem.name}
+              </Text>
+              <Text
+                style={{
+                  marginTop: SIZES.base / 2,
+                  marginHorizontal: SIZES.padding,
+                  color: COLORS.white,
+                  ...FONTS.body3,
+                }}
+              >
+                {selectedItem.type}
+              </Text>
+              <Text
+                style={[{
+                  marginTop: SIZES.radius,
+                  marginHorizontal: SIZES.padding,
+                  color: COLORS.white,
+                },
+                { ...FONTS.h1, fontWeight: 'regular' },]}
+              >
+                {selectedItem.price}
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: SIZES.radius,
+                  marginHorizontal: SIZES.padding,
+                }}
+              >
+                <View>
+                  <Text style={{ color: COLORS.white, ...FONTS.body3 }}>
+                    Select Size
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    flexWrap: "wrap",
+                    flexDirection: "row",
+                    marginLeft: SIZES.radius,
+                  }}
+                >
+                  {renderSizes()}
+                </View>
+              </View>
+
+              <TouchableOpacity
+                style={{
+                  width: "100%",
+                  height: 70,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: SIZES.base,
+                  backgroundColor: "rgba(0,0,0,0.5)",
+                }}
+                onPress={() => {
+                  setSelectedItem(null);
+                  setSelectedSize("");
+                  setShowAddToCartModal(false);
+                }}
+              >
+                <Text style={{ color: COLORS.white, ...FONTS.largeTitleBold }}>
+                  Add To Cart
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </BlurView>
+        </Modal>
+      )}
     </View>
   );
 };
@@ -312,6 +462,18 @@ const style = StyleSheet.create({
   recentSearches: {
     width: "100%",
     transform: [{ rotateY: "180deg" }]
+  },
+  blur: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  absolute: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
 
