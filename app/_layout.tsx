@@ -3,6 +3,8 @@ import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper
 
 export default function RootLayout() {
 
+  // el tema debería ir en un proveedor de tema y no en el layout
+  // los colores deberían ir en /globals/colors.ts
   const colors = {
     primary: {
       red: '#c00000',
