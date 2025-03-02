@@ -3,24 +3,15 @@ import {
   Text,
   View,
 } from 'react-native';
-import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
-import PaymentScreen from '../components/PaymentScreen';
+
+import PaymentScreen from '../../components/PaymentScreen';
 
 const App = () => {
 
-  const theme = {
-    ...DefaultTheme,
-    colors: {
-      ...DefaultTheme.colors,
-      primary: 'tomato',
-      secondary: 'yellow',
-    },
-  };
-
   return (
-    <PaperProvider theme={theme}>
+    <View>
       <PaymentScreen />
-    </PaperProvider>
+    </View>
   )
 };
 

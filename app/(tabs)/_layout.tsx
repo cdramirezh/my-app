@@ -1,20 +1,21 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import Header from '../../components/Header';
+import { useTheme } from 'react-native-paper';
 
 export default function TabLayout() {
+
+  const theme = useTheme();
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: 'tomato',
-        tabBarInactiveTintColor: 'gray',
-        headerStyle: {
-          backgroundColor: 'tomato',
-        },
-        headerShadowVisible: false,
-        headerTintColor: 'white',
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.secondary,
         tabBarStyle: {
           backgroundColor: 'mintcream',
-        }
+        },
+        header: () => <Header />,
       }}
     >
       <Tabs.Screen name="index" options={{

@@ -9,7 +9,7 @@ import {
   Modal,
 } from "react-native";
 import { BlurView } from 'expo-blur';
-import { images, COLORS, SIZES, FONTS } from "../../constants";
+import { images, COLORS, SIZES, FONTS } from "../constants";
 
 interface Item {
   id: number;
