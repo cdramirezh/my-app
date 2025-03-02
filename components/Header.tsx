@@ -10,8 +10,8 @@ const Header = (props: any) => {
 
   return (
     <Appbar.Header style={{ backgroundColor: theme.colors.primary }}>
-      <Appbar.BackAction onPress={() => { }} />
-      <Appbar.Content title={title} />
+      <Appbar.BackAction onPress={() => { }} color="white" />
+      <Appbar.Content title={title} titleStyle={styles.content} />
       <Avatar.Image size={36} source={require('../assets/logos/Logosímbolo.png')} style={styles.brand} />
     </Appbar.Header >
   );
@@ -20,6 +20,9 @@ const Header = (props: any) => {
 const styles = StyleSheet.create({
   brand: {
     marginRight: 10,
+  },
+  content: {
+    color: 'white',
   }
 })
 

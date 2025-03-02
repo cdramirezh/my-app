@@ -3,14 +3,13 @@ import {
   Text,
   View,
 } from 'react-native';
-
-import PaymentScreen from '../../components/PaymentScreen';
+import Showcase from '@/components/Showcase';
 
 const App = () => {
 
   return (
     <View>
-      <PaymentScreen />
+      <Showcase />
     </View>
   )
 };
