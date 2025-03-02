@@ -7,24 +7,24 @@ export default function RootLayout() {
   // los colores deberían ir en /globals/colors.ts
   const colors = {
     primary: {
-      red: '#c00000',
-      black: '#000000',
+      red: 'rgb(192,0,0)',
+      black: 'rgb(0,0,0)',
     },
     secondary: {
-      red: '#930f1e',
-      green1: '#80bc3f',
-      green2: '#018046',
-      green3: '#a8c88e',
-      green4: '#58bb80',
-      green5: '#003529',
-      orange1: '#f49569',
-      orange2: '#9d4020',
-      orange3: '#ffcdb5',
-      orange4: '#d04600',
-      orange5: '#dd783f',
-      blue1: '#99d2d3',
-      blue2: '#55bcbc',
-      blue3: '#17979c',
+      red: 'rgb(147,15,30)',
+      green1: 'rgb(128, 188, 63)',
+      green2: 'rgb(1, 128, 70)',
+      green3: 'rgb(168, 200, 142)',
+      green4: 'rgb(88, 187, 128)',
+      green5: 'rgb(0, 53, 41)',
+      orange1: 'rgb(244, 149, 105)',
+      orange2: 'rgb(157, 64, 32)',
+      orange3: 'rgb(255, 205, 181)',
+      orange4: 'rgb(208, 70, 0)',
+      orange5: 'rgb(221, 120, 63)',
+      blue1: 'rgb(153, 210, 211)',
+      blue2: 'rgb(85, 188, 188)',
+      blue3: 'rgb(23, 151, 156)',
     }
   }
 
@@ -34,6 +34,7 @@ export default function RootLayout() {
       ...DefaultTheme.colors,
       primary: colors.primary.red,
       secondary: colors.secondary.green1,
+      tertiary: colors.secondary.orange1,
     },
   };
 
