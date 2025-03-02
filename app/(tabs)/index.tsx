@@ -1,15 +1,27 @@
 import React from 'react';
 import {
+  Text,
   View,
 } from 'react-native';
-import Home from '../components/Home';
+import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 
 const App = () => {
 
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: 'tomato',
+      secondary: 'yellow',
+    },
+  };
+
   return (
-    <View>
-      <Home />
-    </View>
+    <PaperProvider theme={theme}>
+      <View>
+        <Text>App</Text>
+      </View>
+    </PaperProvider>
   )
 };
 
