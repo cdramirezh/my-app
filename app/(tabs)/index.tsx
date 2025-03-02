@@ -4,6 +4,7 @@ import {
   View,
 } from 'react-native';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
+import PaymentScreen from '../components/PaymentScreen';
 
 const App = () => {
 
@@ -18,9 +19,7 @@ const App = () => {
 
   return (
     <PaperProvider theme={theme}>
-      <View>
-        <Text>App</Text>
-      </View>
+      <PaymentScreen />
     </PaperProvider>
   )
 };
