@@ -1,19 +1,26 @@
 import * as React from 'react';
-import { Appbar } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Appbar, Avatar } from 'react-native-paper';
 import { useTheme } from 'react-native-paper';
 
-const Header = () => {
+const Header = (props: any) => {
   const theme = useTheme();
 
-  return (
+  const title = props.route.name.charAt(0).toUpperCase() + props.route.name.slice(1);
 
-    <Appbar.Header style={{ backgroundColor: theme.colors.secondary }}>
+  return (
+    <Appbar.Header style={{ backgroundColor: theme.colors.primary }}>
       <Appbar.BackAction onPress={() => { }} />
-      <Appbar.Content title="Title" />
-      <Appbar.Action icon="calendar" onPress={() => { }} />
-      <Appbar.Action icon="magnify" onPress={() => { }} />
+      <Appbar.Content title={title} />
+      <Avatar.Image size={36} source={require('../assets/logos/Logosímbolo.png')} style={styles.brand} />
     </Appbar.Header >
   );
 }
+
+const styles = StyleSheet.create({
+  brand: {
+    marginRight: 10,
+  }
+})
 
 export default Header;

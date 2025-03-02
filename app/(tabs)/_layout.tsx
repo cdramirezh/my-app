@@ -15,7 +15,7 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: 'mintcream',
         },
-        header: () => <Header />,
+        header: (props) => <Header {...props} />,
       }}
     >
       <Tabs.Screen name="index" options={{
