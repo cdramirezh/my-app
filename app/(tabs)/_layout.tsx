@@ -28,6 +28,11 @@ export default function TabLayout() {
           <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
         )
       }} />
+      <Tabs.Screen name='offline' options={{
+        title: 'Offline Demo', tabBarIcon: ({ color, focused }) => (
+          <Ionicons name={focused ? 'cloud-offline' : 'cloud-offline-outline'} color={color} size={24} />
+        )
+      }} />
     </Tabs>
   );
 }
