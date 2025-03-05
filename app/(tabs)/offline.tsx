@@ -1,26 +1,49 @@
 import { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button, DataTable, Icon, Modal, Portal, TextInput } from 'react-native-paper';
+import axios from "axios";
+
+const url = 'https://web-production-36cd.up.railway.app/api/v1/categories/'
+
+const getItems = async () => {
+  const items = await axios.get(url)
+  return items.data
+}
+
+type dummyItem = {
+  name: string
+  image: string
+}
+
+const postItem = async (item: dummyItem) => {
+
+  const isObjectEmpty = (obj: any) => {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+  };
+
+  try {
+    const response = await axios.post(url, item)
+    return response.data
+  } catch (err) {
+    if (!isObjectEmpty(err)) return { error: err }
+  }
+}
+
+type item = {
+  key: number,
+  name: string,
+  syncked: boolean,
+}
 
 const initialItems = [
   {
-    key: 1,
+    key: 2,
     name: 'Cupcake',
     syncked: false,
   },
   {
-    key: 2,
-    name: 'Eclair',
-    syncked: false,
-  },
-  {
-    key: 3,
-    name: 'Frozen yogurt',
-    syncked: true,
-  },
-  {
-    key: 4,
+    key: 1,
     name: 'Gingerbread',
     syncked: true,
   },
@@ -59,16 +82,57 @@ const AddModal = ({ visible, onDismiss, onAddItem }: { visible: boolean, onDismi
 
 export default function OfflineScreen() {
 
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState([] as item[]);
 
   const [visible, setVisible] = useState(false);
+
+  const handleGetItems = async () => {
+    const items = await getItems()
+    console.log(items)
+    Alert.alert(JSON.stringify(items))
+  }
+
+  const handlePostItem = async () => {
+    const testDummyItem = {
+      name: 'category3',
+      image: "https://placekitten.com/100/100",
+    }
+    const res = await postItem(testDummyItem)
+  }
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const storedItems = await AsyncStorage.getItem('@items');
+        if (storedItems) {
+          setItems(JSON.parse(storedItems));
+        } else {
+          setItems(initialItems);
+        }
+      } catch (error) {
+        console.error('Error fetching items from Async Storage', error);
+      }
+    };
+
+    fetchItems();
+  }, []);
+
+  const saveItems = async (newItems: item[]) => {
+    try {
+      await AsyncStorage.setItem('@items', JSON.stringify(newItems));
+    } catch (error) {
+      console.error('Error saving items to Async Storage', error);
+    }
+  };
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
   const onAddItem = ({ name }: { name: string }) => {
     const newKey = items.length + 1;
-    setItems([{ key: newKey, name, syncked: false }, ...items]);
+    const newItems = [{ key: newKey, name, syncked: false }, ...items];
+    setItems(newItems);
+    saveItems(newItems);
     hideModal();
   }
 
@@ -100,6 +164,8 @@ export default function OfflineScreen() {
           </DataTable.Row>
         ))}
       </DataTable>
+      <Button mode="elevated" onPress={handleGetItems}>Get items</Button>
+      <Button mode="elevated" onPress={handlePostItem}>Post Item</Button>
     </View>
   );
-} 
+}
