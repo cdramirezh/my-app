@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { View, Text, Alert } from "react-native";
+import * as Network from 'expo-network';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Button, DataTable, Icon, Modal, Portal, TextInput } from 'react-native-paper';
 import axios from "axios";
@@ -7,8 +8,8 @@ import axios from "axios";
 const url = 'https://web-production-36cd.up.railway.app/api/v1/categories/'
 
 const getItems = async () => {
-  const items = await axios.get(url)
-  return items.data
+  const items = await axios.get(url);
+  return items.data;
 }
 
 type dummyItem = {
@@ -23,31 +24,20 @@ const postItem = async (item: dummyItem) => {
   };
 
   try {
-    const response = await axios.post(url, item)
-    return response.data
+    const response = await axios.post(url, item);
+    return response.data;
   } catch (err) {
-    if (!isObjectEmpty(err)) return { error: err }
+    if (!isObjectEmpty(err)) return { error: err };
   }
 }
 
 type item = {
-  key: number,
+  id: number,
   name: string,
+  image: string,
+  createdAt: string,
   syncked: boolean,
 }
-
-const initialItems = [
-  {
-    key: 2,
-    name: 'Cupcake',
-    syncked: false,
-  },
-  {
-    key: 1,
-    name: 'Gingerbread',
-    syncked: true,
-  },
-];
 
 const EditButton = () => {
   return (
@@ -83,38 +73,28 @@ const AddModal = ({ visible, onDismiss, onAddItem }: { visible: boolean, onDismi
 export default function OfflineScreen() {
 
   const [items, setItems] = useState([] as item[]);
-
   const [visible, setVisible] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
 
-  const handleGetItems = async () => {
-    const items = await getItems()
-    console.log(items)
-    Alert.alert(JSON.stringify(items))
-  }
-
-  const handlePostItem = async () => {
-    const testDummyItem = {
-      name: 'category3',
-      image: "https://placekitten.com/100/100",
+  const fetchItems = async () => {
+    try {
+      const apiItems = await getItems();
+      const itemsWithSyncProp = apiItems.map((item: item) => ({ ...item, syncked: true }))
+      await AsyncStorage.setItem('@items', JSON.stringify(itemsWithSyncProp));
+      setItems(itemsWithSyncProp);
+    } catch (error) {
+      console.error('Error fetching items from API', error);
     }
-    const res = await postItem(testDummyItem)
-  }
+  };
+
+  const checkConnection = async () => {
+    const networkState = await Network.getNetworkStateAsync();
+    setIsConnected(!!networkState.isConnected);
+  };
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const storedItems = await AsyncStorage.getItem('@items');
-        if (storedItems) {
-          setItems(JSON.parse(storedItems));
-        } else {
-          setItems(initialItems);
-        }
-      } catch (error) {
-        console.error('Error fetching items from Async Storage', error);
-      }
-    };
-
     fetchItems();
+    checkConnection();
   }, []);
 
   const saveItems = async (newItems: item[]) => {
@@ -128,18 +108,29 @@ export default function OfflineScreen() {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const onAddItem = ({ name }: { name: string }) => {
-    const newKey = items.length + 1;
-    const newItems = [{ key: newKey, name, syncked: false }, ...items];
-    setItems(newItems);
-    saveItems(newItems);
+  const onAddItem = async ({ name }: { name: string }) => {
+    const newItem = {
+      name,
+      image: "https://placekitten.com/100/100",
+    };
+    const response = await postItem(newItem);
+    if (response && !response.error) {
+      const newItems = [response, ...items];
+      setItems(newItems);
+      saveItems(newItems);
+    } else {
+      Alert.alert('Error adding item', response.error.toString());
+    }
     hideModal();
   }
 
   return (
     <View>
+      <Text>
+        {isConnected ? 'ONLINE!' : 'SIN CONEXIÓN!'}
+      </Text>
       <Button mode="outlined" onPress={showModal}>Add new</Button>
-      <Button>Sync</Button>
+      <Button mode="contained" onPress={fetchItems}>Sync</Button>
       <Portal>
         <AddModal visible={visible} onDismiss={hideModal} onAddItem={onAddItem} />
       </Portal>
@@ -152,8 +143,8 @@ export default function OfflineScreen() {
         </DataTable.Header>
 
         {items.map((item) => (
-          <DataTable.Row key={item.key}>
-            <DataTable.Cell>{item.key}</DataTable.Cell>
+          <DataTable.Row key={item.id}>
+            <DataTable.Cell>{item.id}</DataTable.Cell>
             <DataTable.Cell>{item.name}</DataTable.Cell>
             <DataTable.Cell>
               <EditButton />
@@ -164,8 +155,11 @@ export default function OfflineScreen() {
           </DataTable.Row>
         ))}
       </DataTable>
-      <Button mode="elevated" onPress={handleGetItems}>Get items</Button>
-      <Button mode="elevated" onPress={handlePostItem}>Post Item</Button>
+      <Button onPress={async () => {
+        await AsyncStorage.setItem('@items', JSON.stringify([]));
+        setItems([]);
+      }}>Clear</Button>
+      <Button onPress={checkConnection}>Check connection</Button>
     </View>
   );
 }
