@@ -77,13 +77,36 @@ export default function OfflineScreen() {
   const [isConnected, setIsConnected] = useState(false);
 
   const fetchItems = async () => {
-    try {
-      const apiItems = await getItems();
-      const itemsWithSyncProp = apiItems.map((item: item) => ({ ...item, syncked: true }))
-      await AsyncStorage.setItem('@items', JSON.stringify(itemsWithSyncProp));
-      setItems(itemsWithSyncProp);
-    } catch (error) {
-      console.error('Error fetching items from API', error);
+    const uploadNotSyncedItems = async () => {
+      const notSyncedItems = items.filter(item => !item.syncked);
+      for (const item of notSyncedItems) {
+        try {
+          const response = await postItem({ name: item.name, image: item.image });
+          item.syncked = response ? true : false; // Update the syncked status
+        } catch (error) {
+          console.error('Error uploading item to API', error);
+        }
+      }
+      const updatedItems = [...items];
+      await AsyncStorage.setItem('@items', JSON.stringify(updatedItems));
+      setItems(updatedItems);
+    };
+
+    if (isConnected) {
+      await uploadNotSyncedItems();
+      try {
+        const apiItems = await getItems();
+        const itemsWithSyncProp = apiItems.map((item: item) => ({ ...item, syncked: true }));
+        await AsyncStorage.setItem('@items', JSON.stringify(itemsWithSyncProp));
+        setItems(itemsWithSyncProp);
+      } catch (error) {
+        console.error('Error fetching items from API', error);
+      }
+    } else {
+      const storedItems = await AsyncStorage.getItem('@items');
+      if (storedItems) {
+        setItems(JSON.parse(storedItems));
+      }
     }
   };
 
@@ -109,19 +132,35 @@ export default function OfflineScreen() {
   const hideModal = () => setVisible(false);
 
   const onAddItem = async ({ name }: { name: string }) => {
-    const newItem = {
-      name,
-      image: "https://placekitten.com/100/100",
-    };
-    const response = await postItem(newItem);
-    if (response && !response.error) {
-      const newItems = [response, ...items];
-      setItems(newItems);
-      saveItems(newItems);
+    if (isConnected) {
+      const newItem = {
+        name,
+        image: "https://placekitten.com/100/100",
+      };
+      const response = await postItem(newItem);
+      if (response && !response.error) {
+        const newItems = [{...response, syncked : true}, ...items];
+        setItems(newItems);
+        await saveItems(newItems);
+        hideModal();
+      } else {
+        Alert.alert('Error adding item', response.error.toString());
+      }
     } else {
-      Alert.alert('Error adding item', response.error.toString());
+      const newKey = items.length + 1;
+      const newItem = {
+        id: newKey,
+        name,
+        image: "https://placekitten.com/100/100",
+        createdAt: new Date().toISOString(),
+        syncked: isConnected,
+      };
+      const newItems = [newItem, ...items];
+
+      setItems(newItems);
+      await saveItems(newItems);
+      hideModal();
     }
-    hideModal();
   }
 
   return (
